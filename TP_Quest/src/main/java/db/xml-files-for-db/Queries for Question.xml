@@ -1,0 +1,5 @@
+--получить список вопросов по теме с заданной сложностью
+SELECT * FROM questions WHERE id_topic=1 AND id_difficulty=3;
+
+--получить правильный ответ на вопрос
+SELECT answer FROM questions WHERE id=1;
