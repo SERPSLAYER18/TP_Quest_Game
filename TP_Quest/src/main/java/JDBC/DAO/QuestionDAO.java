@@ -85,11 +85,11 @@ public class QuestionDAO implements DAO<QuestionData> {
     @Override
     public void save(QuestionData questionData) throws SQLException {
         executor.sqlUpdate(
-                String.format("insert into question (id_topic,id_difficulty,text,answer) values (%d,%d,'%s','%s')",
-                questionData.getId_topic(),
-                questionData.getId_difficulty(),
+                String.format("insert into questions (text,answer,id_topic,id_difficulty) values ('%s','%s',%d,%d)",
                 questionData.getText(),
-                questionData.getAnswer()));
+                questionData.getAnswer(),
+                questionData.getId_topic(),
+                questionData.getId_difficulty()));
 
     }
 

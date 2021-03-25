@@ -1,8 +1,7 @@
 package JDBC;
 
-import DataSets.QuestionData;
 import JDBC.DAO.*;
-import DataSets.UserData;
+import DataSets.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,27 +19,17 @@ public class DBService {
     private Connection connection = null;
     private UserDAO userDAO = null;
     private QuestionDAO questionDAO = null;
+    private TopicDAO topicDAO = null;
+    private DifficultyDAO difficultyDAO = null;
 
     public DBService() throws SQLException {
         setupConnection();
         userDAO = new UserDAO(connection);
         questionDAO = new QuestionDAO(connection);
+        topicDAO = new TopicDAO(connection);
+        difficultyDAO = new DifficultyDAO(connection);
     }
 
-    public ArrayList<QuestionData>getQuestions(long id_topic, long id_difficulty)
-    {
-        return questionDAO.getQuestions(id_topic,id_difficulty);
-    }
-
-    public String getCorrectAnswer(long id)
-    {
-        return questionDAO.getCorrectAnswer(id);
-    }
-
-    public UserData getUser(long id)
-    {
-        return userDAO.get(id);
-    }
 
     public ArrayList<UserData> getUsers(Predicate<UserData> predicate) throws SQLException
     {
@@ -50,6 +39,11 @@ public class DBService {
     public UserData getUser(String name,String password) throws SQLException
     {
         return userDAO.get(name,password);
+    }
+
+    public UserData getUser(long id)
+    {
+        return userDAO.get(id);
     }
 
     public int getUserRecord(long id){
@@ -136,6 +130,128 @@ public class DBService {
             connection.setAutoCommit(true);
         }
     }
+
+
+
+    public ArrayList<QuestionData>getQuestions(long id_topic, long id_difficulty)
+    {
+        return questionDAO.getQuestions(id_topic,id_difficulty);
+    }
+
+    public String getCorrectAnswer(long id)
+    {
+        return questionDAO.getCorrectAnswer(id);
+    }
+
+    public void saveQuestion(QuestionData questionData) throws SQLException{
+        try {
+            connection.setAutoCommit(false);
+            questionDAO.createTable();
+            questionDAO.save(questionData);
+            connection.commit();
+        }
+        catch (Exception e)
+        {
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+
+    }
+
+    public void deleteQuestion(QuestionData questionData) throws SQLException {
+        try {
+            connection.setAutoCommit(false);
+            questionDAO.delete(questionData);
+            connection.commit();
+        }
+        catch (Exception e)
+        {
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+    }
+
+
+
+    public ArrayList<TopicData> getTopics(Predicate<TopicData> predicate) throws SQLException{
+        return topicDAO.get(predicate);
+    }
+
+    public void saveTopic(TopicData topicData) throws SQLException{
+        try {
+            connection.setAutoCommit(false);
+            topicDAO.createTable();
+            topicDAO.save(topicData);
+            connection.commit();
+        }
+        catch (Exception e)
+        {
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+
+    }
+
+    public void deleteTopic(TopicData topicData) throws SQLException {
+        try {
+            connection.setAutoCommit(false);
+            topicDAO.delete(topicData);
+            connection.commit();
+        }
+        catch (Exception e)
+        {
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+    }
+
+
+
+    public ArrayList<DifficultyData> getDifficulties(Predicate<DifficultyData> predicate) throws SQLException{
+        return difficultyDAO.get(predicate);
+    }
+
+    public void saveDifficulty(DifficultyData difficultyData) throws SQLException{
+        try {
+            connection.setAutoCommit(false);
+            difficultyDAO.createTable();
+            difficultyDAO.save(difficultyData);
+            connection.commit();
+        }
+        catch (Exception e)
+        {
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+
+    }
+
+    public void deleteDifficulty(DifficultyData difficultyData) throws SQLException{
+        try {
+            connection.setAutoCommit(false);
+            difficultyDAO.delete(difficultyData);
+            connection.commit();
+        }
+        catch (Exception e)
+        {
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+
+    }
+
 
 
     private void setupConnection() throws SQLException {

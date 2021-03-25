@@ -1,5 +1,6 @@
 
 import DataSets.QuestionData;
+import DataSets.TopicData;
 import DataSets.UserData;
 import JDBC.DBService;
 
@@ -35,5 +36,17 @@ public class Main {
         }
 
         System.out.println(dbService.getCorrectAnswer(1));
+
+        dbService.saveTopic(new TopicData("Природа"));
+
+        dbService.saveQuestion(new QuestionData("Горы?","Да",2,2));
+
+        ArrayList<QuestionData> list2 = dbService.getQuestions(2,2);
+        //ArrayList<TopicData> list2 = dbService.getTopics(topicData -> true);
+
+        for( var user:list2)
+        {
+            System.out.println(user.toString());
+        }
     }
 }
