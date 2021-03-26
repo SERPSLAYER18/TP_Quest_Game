@@ -71,6 +71,7 @@ public class DifficultyDAO implements DAO<DifficultyData> {
         return null;
     }
 
+
     @Override
     public ArrayList<DifficultyData> get(Predicate<DifficultyData> predicate) throws SQLException {
 

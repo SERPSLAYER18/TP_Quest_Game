@@ -17,6 +17,9 @@ public class QuestionData {
     long id_topic;
     long id_difficulty;
 
+    //String topic;
+    //String difficulty;
+
     public  QuestionData(String text,String answer,long id_topic,long id_difficulty){
 
         this.text = text;
