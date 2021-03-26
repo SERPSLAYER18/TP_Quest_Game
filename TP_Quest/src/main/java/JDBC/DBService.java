@@ -1,7 +1,7 @@
 package JDBC;
 
-import JDBC.DAO.*;
 import DataSets.*;
+import JDBC.DAO.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,16 +18,17 @@ public class DBService {
 
     private Connection connection = null;
     private UserDAO userDAO = null;
+    private QuestionDAO questionDAO = null;
     private TopicDAO topicDAO = null;
     private DifficultyDAO difficultyDAO = null;
     private NewQuestionDAO newQuestionDAO = null;
-
 
     public DBService() throws SQLException {
         setupConnection();
         userDAO = new UserDAO(connection);
         topicDAO = new TopicDAO(connection);
         difficultyDAO = new DifficultyDAO(connection);
+        questionDAO = new QuestionDAO(connection);
         newQuestionDAO = new NewQuestionDAO(connection);
     }
 
@@ -132,22 +133,16 @@ public class DBService {
         }
     }
 
-    public NewQuestionData getRandomQuestion(String topic, String difficulty) {
-        return newQuestionDAO.getRandomQuestion(topic,difficulty);
-    }
-    public ArrayList<NewQuestionData>getQuestions(String topic, String difficulty) {
-        return newQuestionDAO.getQuestions(topic,difficulty);
-    }
 
-    public ArrayList<NewQuestionData>getQuestions(long id_topic, long id_difficulty)
+
+    public ArrayList<QuestionData>getQuestions(long id_topic, long id_difficulty)
     {
-        return newQuestionDAO.getQuestions(id_topic,id_difficulty);
+        return questionDAO.getQuestions(id_topic,id_difficulty);
     }
-
 
     public String getCorrectAnswer(long id)
     {
-        return newQuestionDAO.getCorrectAnswer(id);
+        return questionDAO.getCorrectAnswer(id);
     }
 
     public void saveQuestion(NewQuestionData questionData) throws SQLException{
@@ -181,6 +176,12 @@ public class DBService {
             connection.setAutoCommit(true);
         }
     }
+
+
+    public NewQuestionData getRandomQuestion(String topic, String difficulty){
+       return newQuestionDAO.getRandomQuestion(topic,difficulty);
+    }
+
 
 
 
@@ -258,8 +259,6 @@ public class DBService {
         }
 
     }
-
-
 
     private void setupConnection() throws SQLException {
 
