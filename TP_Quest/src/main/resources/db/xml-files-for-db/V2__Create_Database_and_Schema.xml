@@ -1,0 +1,2 @@
+CREATE DATABASE quest_game_db;
+CREATE SCHEMA qg_public;
