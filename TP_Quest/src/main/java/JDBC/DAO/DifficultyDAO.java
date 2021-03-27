@@ -90,7 +90,7 @@ public class DifficultyDAO implements DAO<DifficultyData> {
 
     @Override
     public void save(DifficultyData difficultyData) throws SQLException {
-        executor.sqlUpdate(String.format("insert into game_user (score) values (%d)",
+        executor.sqlUpdate(String.format("insert into difficulty (score) values (%d)",
                 difficultyData.getScore()));
 
     }
