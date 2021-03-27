@@ -3,6 +3,7 @@ package JDBC;
 import DataSets.*;
 import JDBC.DAO.*;
 
+import org.flywaydb.core.Flyway;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class DBService {
+
+    private static Flyway flyway;
 
     public static final String JDBC_DRIVER = "org.postgresql.Driver";
     public static final String DB_URL = "jdbc:postgresql://localhost:5432/quest_game_db";
@@ -182,6 +185,13 @@ public class DBService {
        return newQuestionDAO.getRandomQuestion(topic,difficulty);
     }
 
+    public  void clearQuestions(){
+        try{
+        newQuestionDAO.clearTable();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
 
 
@@ -265,5 +275,9 @@ public class DBService {
         System.out.println("Connecting to database...");
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
         System.out.println("Database connection established");
+
+        flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
+        flyway.baseline();
+        flyway.migrate();
     }
 }
