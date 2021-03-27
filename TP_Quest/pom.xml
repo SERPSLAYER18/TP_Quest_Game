@@ -56,16 +56,17 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.4.29.Final</version>
         </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>7.5.3</version>
-            <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-maven-plugin</artifactId>
-            <version>7.7.0</version>
+            <version>7.5.3</version>
             <scope>test</scope>
         </dependency>
 
