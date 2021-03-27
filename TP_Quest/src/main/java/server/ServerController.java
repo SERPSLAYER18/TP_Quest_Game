@@ -62,7 +62,7 @@ public class ServerController {
         if(question == null)
             return notFoundPage();
 
-        return String.format("<h1>Случайный вопрос<h1>\n<h2>Тема: %s</h2>\n<h2>Сложность: %s</h2>\n<h2>ID вопроса: %s</h2>\n<h3>%s</h3>\n",
+        return String.format("<h1>РЎР»СѓС‡Р°Р№РЅС‹Р№ РІРѕРїСЂРѕСЃ<h1>\n<h2>РўРµРјР°: %s</h2>\n<h2>РЎР»РѕР¶РЅРѕСЃС‚СЊ: %s</h2>\n<h2>ID РІРѕРїСЂРѕСЃР°: %s</h2>\n<h3>%s</h3>\n",
                 question.getTopic(),
                 question.getDifficulty(),
                 question.getId(),
