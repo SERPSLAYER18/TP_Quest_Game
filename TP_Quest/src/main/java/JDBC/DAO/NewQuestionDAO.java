@@ -82,7 +82,7 @@ public class NewQuestionDAO implements DAO<NewQuestionData> {
         Random rnd = new Random(System.currentTimeMillis());
 
         ArrayList<NewQuestionData> questions= getQuestions(topic,difficulty);
-        return questions.get(rnd.nextInt()%questions.size());
+        return questions.get(Math.abs(rnd.nextInt()%questions.size()));
     }
 
     public String getCorrectAnswer(NewQuestionData newQuestion){
