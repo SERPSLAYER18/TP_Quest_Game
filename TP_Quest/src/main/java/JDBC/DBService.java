@@ -277,7 +277,9 @@ public class DBService {
         System.out.println("Database connection established");
 
         flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
-        flyway.baseline();
+        flyway.configure()
+                .baselineOnMigrate(true)
+                .load();
         flyway.migrate();
     }
 }
