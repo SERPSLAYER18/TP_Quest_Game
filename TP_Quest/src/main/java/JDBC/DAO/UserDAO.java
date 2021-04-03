@@ -129,6 +129,6 @@ public class UserDAO implements DAO<UserData> {
 
     @Override
     public void clearTable() throws SQLException {
-        executor.sqlUpdate("delete from game_user");
+        executor.sqlUpdate("TRUNCATE game_user");
     }
 }

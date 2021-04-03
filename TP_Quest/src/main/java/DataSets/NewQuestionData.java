@@ -17,7 +17,10 @@ public class NewQuestionData extends QuestionDTO {
     String difficulty;
 
     public NewQuestionData(String text, String answer, String topic, String difficulty){
-        super();
+        this.text = text;
+        this.answer = answer;
+        this.topic = topic;
+        this.difficulty = difficulty;
     }
 
     public NewQuestionData(ResultSet set) throws SQLException {

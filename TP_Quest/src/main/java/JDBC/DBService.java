@@ -14,6 +14,7 @@ public class DBService {
 
     private static Flyway flyway;
     public static DBService instance;
+
     static {
         try {
             instance  = new DBService();
@@ -284,8 +285,8 @@ public class DBService {
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
         System.out.println("Database connection established");
 
-//        flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
-//        flyway.baseline();
-//        flyway.migrate();
+        flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
+        flyway.configure().baselineOnMigrate(true);
+        flyway.migrate();
     }
 }

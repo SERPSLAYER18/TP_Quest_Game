@@ -5,5 +5,3 @@ CREATE TABLE IF NOT EXISTS Game_User (
   	score INTEGER DEFAULT 0,
   	UNIQUE(name,password)
 );
-
-INSERT INTO questions () VALUES
