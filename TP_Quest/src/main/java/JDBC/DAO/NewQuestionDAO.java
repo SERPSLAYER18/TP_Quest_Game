@@ -82,6 +82,8 @@ public class NewQuestionDAO implements DAO<NewQuestionData> {
         Random rnd = new Random(System.currentTimeMillis());
 
         ArrayList<NewQuestionData> questions= getQuestions(topic,difficulty);
+        if (questions.size() == 0)
+            return null;
         return questions.get(Math.abs(rnd.nextInt()%questions.size()));
     }
 

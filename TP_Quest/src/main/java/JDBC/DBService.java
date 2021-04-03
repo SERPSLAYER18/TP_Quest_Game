@@ -13,6 +13,14 @@ import java.util.function.Predicate;
 public class DBService {
 
     private static Flyway flyway;
+    public static DBService instance;
+    static {
+        try {
+            instance  = new DBService();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     public static final String JDBC_DRIVER = "org.postgresql.Driver";
     public static final String DB_URL = "jdbc:postgresql://localhost:5432/quest_game_db";
@@ -276,10 +284,8 @@ public class DBService {
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
         System.out.println("Database connection established");
 
-        flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
-        flyway.configure()
-                .baselineOnMigrate(true)
-                .load();
-        flyway.migrate();
+//        flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
+//        flyway.baseline();
+//        flyway.migrate();
     }
 }
