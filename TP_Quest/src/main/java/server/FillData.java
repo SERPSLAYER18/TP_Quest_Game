@@ -11,9 +11,9 @@ import java.util.Random;
 public class FillData {
     public static void fillUsers() throws SQLException {
         ArrayList<UserData> users = new ArrayList<>();
-        users.add(new UserData("Kirill", "12345"));
+        users.add(new UserData("Kirill", "1234--"));
         users.add(new UserData("Zlata", "11111"));
-        users.add(new UserData("Liza", "рейкъявик"));
+        users.add(new UserData("Liza", "рейкик"));
         users.add(new UserData("Grape", "да"));
 
         DBService service = new DBService();

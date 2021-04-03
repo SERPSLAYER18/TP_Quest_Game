@@ -1,33 +1,29 @@
-package JDBC.DAO;
+package dao.impl;
 
-import DataSets.UserData;
-import JDBC.QueryExecutor.*;
-
+import JDBC.QueryExecutor.SQLExecutor;
+import dao.UserDao;
+import dao.domain.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-public class UserDAO implements DAO<UserData> {
+public class UserDaoImpl implements UserDao {
     private SQLExecutor executor = null;
 
-    public UserDAO(Connection connection) throws SQLException {
-        executor = new SQLExecutor( connection);
+    public UserDaoImpl(Connection connection) throws SQLException {
+        executor = new SQLExecutor(connection);
         createTable();
     }
 
-    /**
-     *
-     * Special SQL queries
-     */
-    public UserData get(String name,String password) {
+    public User get(String name, String password) {
         try {
             return executor.sqlQuery("select * from game_user where name = '" + name +
-                    "' and password = '" + password + "'", resultSet -> {
-                        ArrayList<UserData> list = new ArrayList<>();
+                            "' and password = '" + password + "'", resultSet -> {
+                        ArrayList<User> list = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new UserData(resultSet));
+                            list.add(new User(resultSet));
                         }
                         return list;
                     }
@@ -38,7 +34,7 @@ public class UserDAO implements DAO<UserData> {
         return null;
     }
 
-    public int getRecord(long id){
+    public int getRecord(long id) {
         try {
             return executor.sqlQuery("select score from game_user where id = " + id, resultSet -> {
                         ArrayList<Integer> list = new ArrayList<>();
@@ -56,12 +52,12 @@ public class UserDAO implements DAO<UserData> {
 
 
     @Override
-    public UserData get(long id) {
+    public User get(long id) {
         try {
             return executor.sqlQuery("select * from game_user where id = " + id, resultSet -> {
-                        ArrayList<UserData> list = new ArrayList<>();
+                        ArrayList<User> list = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new UserData(resultSet));
+                            list.add(new User(resultSet));
                         }
                         return list;
                     }
@@ -73,12 +69,12 @@ public class UserDAO implements DAO<UserData> {
     }
 
     @Override
-    public ArrayList<UserData> get(Predicate<UserData> predicate) throws SQLException {
+    public ArrayList<User> get(Predicate<User> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from game_user", resultSet -> {
-                    ArrayList<UserData> list = new ArrayList<>();
+                    ArrayList<User> list = new ArrayList<>();
                     while (resultSet.next()) {
-                        UserData userData = new UserData(resultSet);
+                        User userData = new User(resultSet);
                         if (predicate.test(userData))
                             list.add(userData);
                     }
@@ -89,7 +85,7 @@ public class UserDAO implements DAO<UserData> {
     }
 
     @Override
-    public void save(UserData userData) throws SQLException {
+    public void save(User userData) throws SQLException {
         executor.sqlUpdate(String.format("insert into game_user (name,password,score) values ('%s','%s',%d)",
                 userData.getName(),
                 userData.getPassword(),
@@ -98,8 +94,8 @@ public class UserDAO implements DAO<UserData> {
     }
 
     @Override
-    public void update(UserData userData, String[] params) throws SQLException {
-        executor.sqlUpdate(String.format( "update game_user set name = %s, password = %s, score = %d where id = %d",
+    public void update(User userData, String[] params) throws SQLException {
+        executor.sqlUpdate(String.format("update game_user set name = %s, password = %s, score = %d where id = %d",
                 userData.getName(),
                 userData.getPassword(),
                 userData.getScore(),
@@ -107,8 +103,8 @@ public class UserDAO implements DAO<UserData> {
     }
 
     @Override
-    public void delete(UserData userData) throws SQLException {
-        executor.sqlUpdate(String.format( "delete from game_user where id = %d", userData.getId()));
+    public void delete(User userData) throws SQLException {
+        executor.sqlUpdate(String.format("delete from game_user where id = %d", userData.getId()));
 
     }
 
@@ -129,6 +125,6 @@ public class UserDAO implements DAO<UserData> {
 
     @Override
     public void clearTable() throws SQLException {
-        executor.sqlUpdate("TRUNCATE game_user");
+        executor.sqlUpdate("delete from game_user");
     }
 }
