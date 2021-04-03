@@ -1,35 +1,23 @@
 package DataSets;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import server.DTO.QuestionDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class NewQuestionData {
+public class NewQuestionData extends QuestionDTO {
 
     long id;
     String text;
     String answer;
-
-    //long id_topic;
-    //long id_difficulty;
-
     String topic;
     String difficulty;
 
     public NewQuestionData(String text, String answer, String topic, String difficulty){
-
-        this.text = text;
-        this.answer = answer;
-        this.topic = topic;
-        this.difficulty = difficulty;
+        super();
     }
 
     public NewQuestionData(ResultSet set) throws SQLException {
