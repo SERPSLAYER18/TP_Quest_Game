@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MessagingStompWebsocketApplication {
 
 	public static void main(String[] args) {
-			SpringApplication.run(MessagingStompWebsocketApplication.class, args);
+		SpringApplication.run(MessagingStompWebsocketApplication.class, args);
 	}
 }

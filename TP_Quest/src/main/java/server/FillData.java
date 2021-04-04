@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class FillData {
 
-    public static DBService service;
+    public static DBService service = DBService.instance;
 
     public static void fillUsers() throws SQLException {
         List<UserDto> users = new ArrayList<>();
@@ -54,9 +54,17 @@ public class FillData {
 
     }
 
-    public static void main(String[] args) throws SQLException {
-        service = new DBService();
-        fillUsers();
-        fillQuestions();
+    public static void main(String[] args) {
+        fillDataBase();
+    }
+
+    public static void fillDataBase()  {
+
+        try {
+            fillUsers();
+            fillQuestions();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
