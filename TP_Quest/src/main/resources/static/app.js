@@ -34,6 +34,10 @@ function disconnect() {
 }
 
 function sendQuestionRequest() {
+    if(stompClient==null){
+        alert("Connect to websocket first")
+        return
+    }
     stompClient.send("/app/question", {}, JSON.stringify({
         'topic': $("#topic").val(),
         'difficulty':$("#difficulty").val()
