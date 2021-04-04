@@ -43,9 +43,13 @@ function sendQuestionRequest() {
 
 function showQuestion(questionDTO) {
     var question = JSON.parse(questionDTO.body);
-    $("questions").empty();
-    $("questions").append(
-        "<tr><td>" + question.text + "</td></tr>");
+    $("#questions").empty();
+    $("#questions").append(
+        ("<tr>"+
+            "<td>" +  String(question.id) + "</td>"+
+            "<td>" +  question.text + "</td>"+
+            "<td>" +  question.answer + "</td>"+
+            "</tr>"));
 }
 
 $(function () {
