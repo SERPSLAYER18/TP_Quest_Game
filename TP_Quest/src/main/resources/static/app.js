@@ -41,11 +41,9 @@ function sendQuestionRequest() {
 }
 
 
-let question;
-question.answer = undefined;
 
 function showQuestion(questionDTO) {
-    let question = JSON.parse(questionDTO.body);
+    var question = JSON.parse(questionDTO.body);
     $("#questions").empty();
     $("#questions").append(
         ("<tr>"+
