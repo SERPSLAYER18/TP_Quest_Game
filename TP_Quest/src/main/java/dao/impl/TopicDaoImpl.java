@@ -1,6 +1,6 @@
 package dao.impl;
 
-import JDBC.QueryExecutor.SQLExecutor;
+import service.queryExecutor.SQLExecutor;
 import dao.TopicDao;
 import dao.domain.Topic;
 

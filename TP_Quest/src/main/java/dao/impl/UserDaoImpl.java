@@ -1,6 +1,6 @@
 package dao.impl;
 
-import JDBC.QueryExecutor.SQLExecutor;
+import service.queryExecutor.SQLExecutor;
 import dao.UserDao;
 import dao.domain.User;
 
@@ -74,9 +74,9 @@ public class UserDaoImpl implements UserDao {
         return executor.sqlQuery("select * from game_user", resultSet -> {
                     ArrayList<User> list = new ArrayList<>();
                     while (resultSet.next()) {
-                        User userData = new User(resultSet);
-                        if (predicate.test(userData))
-                            list.add(userData);
+                        User User = new User(resultSet);
+                        if (predicate.test(User))
+                            list.add(User);
                     }
                     return list;
                 }
@@ -85,26 +85,26 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void save(User userData) throws SQLException {
+    public void save(User User) throws SQLException {
         executor.sqlUpdate(String.format("insert into game_user (name,password,score) values ('%s','%s',%d)",
-                userData.getName(),
-                userData.getPassword(),
-                userData.getScore()));
+                User.getName(),
+                User.getPassword(),
+                User.getScore()));
 
     }
 
     @Override
-    public void update(User userData, String[] params) throws SQLException {
-        executor.sqlUpdate(String.format("update game_user set name = %s, password = %s, score = %d where id = %d",
-                userData.getName(),
-                userData.getPassword(),
-                userData.getScore(),
-                userData.getId()));
+    public void update(User User, String[] params) throws SQLException {
+        executor.sqlUpdate(String.format("update game_user set name = '%s', password = '%s', score = %d where id = %d",
+                User.getName(),
+                User.getPassword(),
+                User.getScore(),
+                User.getId()));
     }
 
     @Override
-    public void delete(User userData) throws SQLException {
-        executor.sqlUpdate(String.format("delete from game_user where id = %d", userData.getId()));
+    public void delete(User User) throws SQLException {
+        executor.sqlUpdate(String.format("delete from game_user where id = %d", User.getId()));
 
     }
 

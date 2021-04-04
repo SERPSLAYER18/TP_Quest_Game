@@ -1,31 +1,20 @@
 package dto;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class UserDto {
 
     private long id;
-    private String name;
-    private String password = null;
+    @NotNull
+    private final String name;
+    @NotNull
+    private final String password;
     private int score = 0;
 
-    public UserDto(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
-
-    public UserDto(ResultSet set) throws SQLException {
-        this(
-                set.getLong(1),
-                set.getString(2),
-                set.getString(3),
-                set.getInt(4));
-
-    }
 }
