@@ -41,6 +41,7 @@ function sendQuestionRequest() {
 }
 
 
+
 function showQuestion(questionDTO) {
     var question = JSON.parse(questionDTO.body);
     $("#questions").empty();

@@ -188,6 +188,11 @@ public class DBService {
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
         System.out.println("Database connection established");
 
+
+    }
+
+    void migrate()
+    {
         flyway = Flyway.configure().dataSource(DB_URL, USER, PASS).load();
         flyway.clean();
         flyway.configure().baselineOnMigrate(true);
