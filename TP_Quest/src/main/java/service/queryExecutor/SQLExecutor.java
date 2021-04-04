@@ -1,6 +1,4 @@
-package JDBC.QueryExecutor;
-
-import JDBC.DBService;
+package service.queryExecutor;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

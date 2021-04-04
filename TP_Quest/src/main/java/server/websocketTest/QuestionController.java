@@ -1,20 +1,22 @@
 package server.websocketTest;
 
-import JDBC.DBService;
+import service.DBService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import server.DTO.QuestionDTO;
-import server.DTO.QuestionQueryDTO;
+import dto.QuestionDto;
+import dto.QuestionQueryDto;
 
 @Controller
 public class QuestionController {
 
-    @MessageMapping("/question")
-    @SendTo("/topic/questions")
-    public QuestionDTO randomQuestion(QuestionQueryDTO questionQuery) throws Exception {
-        QuestionDTO question = DBService.instance.getRandomQuestion(questionQuery.getTopic(),questionQuery.getDifficulty());
-        return question;
+    @MessageMapping("/QuestionDto")
+    @SendTo("/topic/QuestionDtos")
+    public QuestionDto randomQuestionDto(QuestionQueryDto questionDtoQuery) throws Exception {
+        QuestionDto questionDto = DBService.instance.getRandomQuestion(
+                questionDtoQuery.getTopic(),
+                questionDtoQuery.getDifficulty());
+        return questionDto;
     }
 
 }

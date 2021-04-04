@@ -1,6 +1,6 @@
 package dao.impl;
 
-import JDBC.QueryExecutor.SQLExecutor;
+import service.queryExecutor.SQLExecutor;
 import dao.domain.Question;
 import dao.QuestionDao;
 
@@ -148,9 +148,9 @@ public class QuestionDaoImpl implements QuestionDao {
                 "INNER JOIN difficulty d ON d.id = and q.id_difficulty) ", resultSet -> {
                     ArrayList<Question> list = new ArrayList<>();
                     while (resultSet.next()) {
-                        Question userData = new Question(resultSet);
-                        if (predicate.test(userData))
-                            list.add(userData);
+                        Question User = new Question(resultSet);
+                        if (predicate.test(User))
+                            list.add(User);
                     }
                     return list;
                 }
