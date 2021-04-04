@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Random;
 
 public class FillData {
+
+    public static DBService service;
+
     public static void fillUsers() throws SQLException {
         List<UserDto> users = new ArrayList<>();
         users.add(new UserDto("Kirill", "1234--"));
@@ -18,7 +21,6 @@ public class FillData {
         users.add(new UserDto("Liza", "рейкик"));
         users.add(new UserDto("Grape", "да"));
 
-        DBService service = new DBService();
         service.cleanUpUsers();
         Random random = new Random();
 
@@ -44,9 +46,6 @@ public class FillData {
         questions.add(new QuestionDto(" Именно он был первым ведущим передачи \"Кинопанорама\"","Алексей Каплер.","Кино","500"));
         questions.add(new QuestionDto(" ТАК называется биографический фильм о жизни рок-музыканта Иэна Дьюри","Секс, наркотики и рок-н-ролл","Кино","400"));
 
-
-        DBService service = new DBService();
-
         service.clearQuestions();
         for(var q:questions)
         {
@@ -56,6 +55,7 @@ public class FillData {
     }
 
     public static void main(String[] args) throws SQLException {
+        service = new DBService();
         fillUsers();
         fillQuestions();
     }
