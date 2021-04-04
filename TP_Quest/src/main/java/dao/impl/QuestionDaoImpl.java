@@ -7,6 +7,7 @@ import dao.QuestionDao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -49,7 +50,7 @@ public class QuestionDaoImpl implements QuestionDao {
         return -1;
     }
 
-    public ArrayList<Question>getQuestions(long id_topic, long id_difficulty){
+    public List<Question> getQuestions(long id_topic, long id_difficulty){
         try {
             return executor.sqlQuery("SELECT q.id,q.text,q.answer,t.name,d.score " +
                             "FROM ((questions q " +
@@ -68,7 +69,7 @@ public class QuestionDaoImpl implements QuestionDao {
         return null;
     }
 
-    public ArrayList<Question>getQuestions(String topic, String difficulty){
+    public List<Question> getQuestions(String topic, String difficulty){
 
         long id_difficulty,id_topic;
 
@@ -82,7 +83,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
         Random rnd = new Random(System.currentTimeMillis());
 
-        ArrayList<Question> questions= getQuestions(topic,difficulty);
+        List<Question> questions= getQuestions(topic,difficulty);
         return questions.get(Math.abs(rnd.nextInt()%questions.size()));
     }
 
@@ -140,7 +141,7 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public ArrayList<Question> get(Predicate<Question> predicate) throws SQLException {
+    public List<Question> get(Predicate<Question> predicate) throws SQLException {
 
         return executor.sqlQuery("SELECT q.id,q.text,q.answer,t.name,d.score " +
                 "FROM ((questions q " +

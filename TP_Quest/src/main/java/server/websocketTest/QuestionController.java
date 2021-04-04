@@ -10,8 +10,8 @@ import dto.QuestionQueryDto;
 @Controller
 public class QuestionController {
 
-    @MessageMapping("/QuestionDto")
-    @SendTo("/topic/QuestionDtos")
+    @MessageMapping("/Question")
+    @SendTo("/topic/Questions")
     public QuestionDto randomQuestionDto(QuestionQueryDto questionDtoQuery) throws Exception {
         QuestionDto questionDto = DBService.instance.getRandomQuestion(
                 questionDtoQuery.getTopic(),

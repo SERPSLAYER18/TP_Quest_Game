@@ -25,11 +25,11 @@ public class FillData {
 
         Random random = new Random();
         for (var user : users) {
-            user.setScore(Math.abs(random.nextInt() % 100));
+            user.setScore(Math.abs(random.nextInt() % 10));
             service.saveUser(user);
         }
         for (var user : users) {
-            service.updateUserRecord(user, Math.abs(random.nextInt() % 20));
+            service.updateUserRecord(user, Math.abs(random.nextInt() % 200));
         }
 
     }

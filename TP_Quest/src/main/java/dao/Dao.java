@@ -1,14 +1,14 @@
 package dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public interface Dao<T> {
 
     T get(long id);
 
-    ArrayList<T> get(Predicate<T> predicate) throws SQLException;
+    List<T> get(Predicate<T> predicate) throws SQLException;
 
     void save(T t) throws SQLException;
 
