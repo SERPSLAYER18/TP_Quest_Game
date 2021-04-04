@@ -2,7 +2,7 @@ package dao;
 
 import dao.domain.Question;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface QuestionDao extends Dao<Question> {
 
@@ -10,9 +10,9 @@ public interface QuestionDao extends Dao<Question> {
 
     long getDifficultyIndex(String difficulty);
 
-    ArrayList<Question> getQuestions(long id_topic, long id_difficulty);
+    List<Question> getQuestions(long id_topic, long id_difficulty);
 
-    ArrayList<Question> getQuestions(String topic, String difficulty);
+    List<Question> getQuestions(String topic, String difficulty);
 
     Question getRandomQuestion(String topic, String difficulty);
 

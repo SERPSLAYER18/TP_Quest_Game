@@ -6,6 +6,7 @@ import dao.domain.Topic;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
@@ -35,7 +36,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public ArrayList<Topic> get(Predicate<Topic> predicate) throws SQLException {
+    public List<Topic> get(Predicate<Topic> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from topic", resultSet -> {
                     ArrayList<Topic> list = new ArrayList<>();

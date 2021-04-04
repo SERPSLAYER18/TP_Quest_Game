@@ -7,6 +7,7 @@ import dao.domain.Difficulty;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class DifficultyDaoImpl implements DifficultyDao {
@@ -71,10 +72,10 @@ public class DifficultyDaoImpl implements DifficultyDao {
     }
 
     @Override
-    public ArrayList<Difficulty> get(Predicate<Difficulty> predicate) throws SQLException {
+    public List<Difficulty> get(Predicate<Difficulty> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from difficulty", resultSet -> {
-                    ArrayList<Difficulty> list = new ArrayList<>();
+                    List<Difficulty> list = new ArrayList<>();
                     while (resultSet.next()) {
                         Difficulty difficultyData = new Difficulty(resultSet);
                         if (predicate.test(difficultyData))

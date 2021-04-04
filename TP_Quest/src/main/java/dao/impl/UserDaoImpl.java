@@ -7,6 +7,7 @@ import dao.domain.User;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class UserDaoImpl implements UserDao {
@@ -69,7 +70,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public ArrayList<User> get(Predicate<User> predicate) throws SQLException {
+    public List<User> get(Predicate<User> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from game_user", resultSet -> {
                     ArrayList<User> list = new ArrayList<>();

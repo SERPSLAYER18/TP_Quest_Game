@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
 
 public class SQLExecutor {
     private Connection connection = null;
@@ -20,12 +20,12 @@ public class SQLExecutor {
         statement.close();
     }
 
-    public <T> ArrayList<T> sqlQuery(String sql, DataSetAction<T> action) throws SQLException {
+    public <T> List<T> sqlQuery(String sql, DataSetAction<T> action) throws SQLException {
         Statement statement = connection.createStatement();
         statement.executeQuery(sql);
 
         ResultSet result = statement.getResultSet();
-        ArrayList<T> values = action.handle(result);
+        List<T> values = action.handle(result);
 
         statement.close();
         result.close();

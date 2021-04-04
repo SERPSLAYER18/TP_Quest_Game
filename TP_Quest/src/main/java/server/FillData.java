@@ -21,10 +21,12 @@ public class FillData {
         DBService service = new DBService();
         service.cleanUpUsers();
         Random random = new Random();
+
         for (UserDto user : users) {
             user.setScore(Math.abs(random.nextInt() % 1000));
             service.saveUser(user);
         }
+
 
     }
 
