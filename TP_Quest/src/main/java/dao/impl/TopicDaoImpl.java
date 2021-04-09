@@ -1,35 +1,43 @@
 package dao.impl;
 
-import service.queryExecutor.SQLExecutor;
 import dao.TopicDao;
 import dao.domain.Topic;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class TopicDaoImpl implements TopicDao {
-    private SQLExecutor executor = null;
+
+    private Connection connection = null;
 
     public TopicDaoImpl(Connection connection) throws SQLException {
-        executor = new SQLExecutor(connection);
+        this.connection = connection;
         createTable();
     }
 
     @Override
     public Topic get(long id) {
         try {
-            return executor.sqlQuery("select * from topic where id = " + id, resultSet -> {
-                        List<Topic> resultDataList = new ArrayList<>();
-                        while (resultSet.next()) {
-                            resultDataList.add(new Topic(resultSet.getLong(1),
-                                    resultSet.getString(2)));
-                        }
-                        return resultDataList;
-                    }
-            ).get(0);
+
+            PreparedStatement stm = connection.prepareStatement("select * from topic where id=?");
+            stm.setLong(1, id);
+            ResultSet resultSet = stm.executeQuery();
+
+            List<Topic> resultDataList = new ArrayList<>();
+            while (resultSet.next()) {
+                resultDataList.add(new Topic(
+                        resultSet.getLong(1),
+                        resultSet.getString(2)));
+            }
+            stm.close();
+            resultSet.close();
+            return resultDataList.get(0);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -39,55 +47,78 @@ public class TopicDaoImpl implements TopicDao {
     @Override
     public List<Topic> get(Predicate<Topic> predicate) throws SQLException {
 
-        return executor.sqlQuery("select * from topic", resultSet -> {
-                    List<Topic> resultDataList = new ArrayList<>();
-                    while (resultSet.next()) {
-                        Topic topicData = new Topic(resultSet.getLong(1),
-                                resultSet.getString(2));
-                        if (predicate.test(topicData))
-                            resultDataList.add(topicData);
-                    }
-                    return resultDataList;
-                }
-        );
+        PreparedStatement stm = connection.prepareStatement("select * from topic");
+        ResultSet resultSet = stm.executeQuery();
+
+        List<Topic> resultDataList = new ArrayList<>();
+        while (resultSet.next()) {
+            Topic topicData = new Topic(resultSet.getLong(1),
+                    resultSet.getString(2));
+            if (predicate.test(topicData))
+                resultDataList.add(topicData);
+        }
+        stm.close();
+        resultSet.close();
+        return resultDataList;
 
     }
 
     @Override
     public void save(Topic topicData) throws SQLException {
-        executor.sqlUpdate(String.format("insert into topic (name) values ('%s')",
-                topicData.getName()));
 
+        PreparedStatement stm = connection.prepareStatement("insert into topic (name) values (?)");
+        stm.setString(1, topicData.getName());
+        stm.executeUpdate();
+
+        stm.close();
     }
 
     @Override
     public void update(Topic topicData, String[] params) throws SQLException {
-        executor.sqlUpdate(String.format("update topic set name = %s where id = %d",
-                topicData.getName(),
-                topicData.getId()));
+
+        PreparedStatement stm = connection.prepareStatement("update topic set name=? where id=?");
+        stm.setString(1, topicData.getName());
+        stm.setLong(2, topicData.getId());
+        stm.executeUpdate();
+
+        stm.close();
+
     }
 
     @Override
     public void delete(Topic topicData) throws SQLException {
-        executor.sqlUpdate(String.format("delete from topic where id = %d", topicData.getId()));
+        PreparedStatement stm = connection.prepareStatement("delete from topic where id=?");
+        stm.setLong(1, topicData.getId());
+        stm.executeUpdate();
 
+        stm.close();
     }
 
     @Override
     public void createTable() throws SQLException {
-        executor.sqlUpdate("CREATE TABLE IF NOT EXISTS topic(" +
-                " id SERIAL PRIMARY KEY," +
-                " name VARCHAR(50) NOT NULL," +
-                " UNIQUE(name))");
+        PreparedStatement stm = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS topic(" +
+                        " id SERIAL PRIMARY KEY," +
+                        " name VARCHAR(50) NOT NULL," +
+                        " UNIQUE(name))");
+        stm.executeUpdate();
+
+        stm.close();
     }
 
     @Override
     public void dropTable() throws SQLException {
-        executor.sqlUpdate("drop table topic");
+        PreparedStatement stm = connection.prepareStatement("drop table topic");
+        stm.executeUpdate();
+
+        stm.close();
     }
 
     @Override
     public void clearTable() throws SQLException {
-        executor.sqlUpdate("delete from topic");
+        PreparedStatement stm = connection.prepareStatement("delete from topic");
+        stm.executeUpdate();
+
+        stm.close();
     }
 }

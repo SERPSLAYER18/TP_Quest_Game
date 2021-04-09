@@ -9,11 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class QuestionDaoImpl implements QuestionDao {
-
 
     private Connection connection = null;
 
@@ -109,7 +107,6 @@ public class QuestionDaoImpl implements QuestionDao {
         return getQuestions(topicId, difficultyId);
     }
 
-    //SQL рандомный вопрос запрос -- ORDER BY RANDOM() limit 1
     public Question getRandomQuestion(String topic, String difficulty) {
 
         long difficultyId, topicId;
@@ -263,7 +260,6 @@ public class QuestionDaoImpl implements QuestionDao {
         stm.executeUpdate();
 
         stm.close();
-
     }
 
     @Override
