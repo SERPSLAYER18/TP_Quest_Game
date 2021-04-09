@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+
 public class DBService {
 
 
@@ -45,6 +46,7 @@ public class DBService {
     public DBService() throws SQLException {
 
         PropertiesImporter pi = new PropertiesImporter();
+
         JDBC_DRIVER = pi.getProperty("JDBC_DRIVER");
         DB_URL = pi.getProperty("DB_URL");
         USER = pi.getProperty("USER");
@@ -115,7 +117,7 @@ public class DBService {
         try {
             connection.setAutoCommit(false);
             userDAO.createTable();
-            userDAO.save(new User(user.getId(), user.getName(), user.getPassword(), user.getScore()));
+            userDAO.save(new User(user.getId(), user.getName(), user.getPassword().toCharArray(), user.getScore()));
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
@@ -188,7 +190,7 @@ public class DBService {
         connection = DriverManager.getConnection(DB_URL, USER, PASS);
         System.out.println("Database connection established");
 
-
+        migrate();
     }
 
     void migrate()

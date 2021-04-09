@@ -24,11 +24,11 @@ public class DifficultyDaoImpl implements DifficultyDao {
         try {
             return executor.sqlQuery("select * from difficulty where name = '" + name +
                             "' and password = '" + password + "'", resultSet -> {
-                        ArrayList<Difficulty> list = new ArrayList<>();
+                        List<Difficulty> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new Difficulty(resultSet));
+                            resultDataList.add(new Difficulty(resultSet.getLong(1),resultSet.getInt(2)));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -41,11 +41,11 @@ public class DifficultyDaoImpl implements DifficultyDao {
     public int getRecord(long id) {
         try {
             return executor.sqlQuery("select score from difficulty where id = " + id, resultSet -> {
-                        ArrayList<Integer> list = new ArrayList<>();
+                        List<Integer> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(resultSet.getInt(1));
+                            resultDataList.add(resultSet.getInt(1));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -58,11 +58,12 @@ public class DifficultyDaoImpl implements DifficultyDao {
     public Difficulty get(long id) {
         try {
             return executor.sqlQuery("select * from difficulty where id = " + id, resultSet -> {
-                        ArrayList<Difficulty> list = new ArrayList<>();
+                        List<Difficulty> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new Difficulty(resultSet));
+                            resultDataList.add(new Difficulty(resultSet.getLong(1),
+                                    resultSet.getInt(2)));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -75,13 +76,14 @@ public class DifficultyDaoImpl implements DifficultyDao {
     public List<Difficulty> get(Predicate<Difficulty> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from difficulty", resultSet -> {
-                    List<Difficulty> list = new ArrayList<>();
+                    List<Difficulty> resultDataList = new ArrayList<>();
                     while (resultSet.next()) {
-                        Difficulty difficultyData = new Difficulty(resultSet);
+                        Difficulty difficultyData = new Difficulty(resultSet.getLong(1),
+                                resultSet.getInt(2));
                         if (predicate.test(difficultyData))
-                            list.add(difficultyData);
+                            resultDataList.add(difficultyData);
                     }
-                    return list;
+                    return resultDataList;
                 }
         );
 

@@ -17,10 +17,4 @@ public class Topic {
         this.name = name;
     }
 
-    public Topic(ResultSet set) throws SQLException {
-        this(
-                set.getLong(1),
-                set.getString(2));
-
-    }
 }

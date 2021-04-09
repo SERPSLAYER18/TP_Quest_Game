@@ -11,7 +11,7 @@ public class PropertiesImporter{
 
         String prop = null;
 
-        try(InputStream fis = this.getClass().getClassLoader().getResourceAsStream("db.properties")){
+        try(InputStream fis = this.getClass().getClassLoader().getResourceAsStream("application.yaml")){
             property.load(fis);
 
             prop = property.getProperty(name);

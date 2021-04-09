@@ -22,11 +22,12 @@ public class TopicDaoImpl implements TopicDao {
     public Topic get(long id) {
         try {
             return executor.sqlQuery("select * from topic where id = " + id, resultSet -> {
-                        ArrayList<Topic> list = new ArrayList<>();
+                        List<Topic> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new Topic(resultSet));
+                            resultDataList.add(new Topic(resultSet.getLong(1),
+                                    resultSet.getString(2)));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -39,13 +40,14 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> get(Predicate<Topic> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from topic", resultSet -> {
-                    ArrayList<Topic> list = new ArrayList<>();
+                    List<Topic> resultDataList = new ArrayList<>();
                     while (resultSet.next()) {
-                        Topic topicData = new Topic(resultSet);
+                        Topic topicData = new Topic(resultSet.getLong(1),
+                                resultSet.getString(2));
                         if (predicate.test(topicData))
-                            list.add(topicData);
+                            resultDataList.add(topicData);
                     }
-                    return list;
+                    return resultDataList;
                 }
         );
 

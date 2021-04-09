@@ -24,11 +24,4 @@ public class Question {
         this.difficulty = difficulty;
     }
 
-    public Question(ResultSet set) throws SQLException {
-        this(set.getLong(1),
-                set.getString(2),
-                set.getString(3),
-                set.getString(4),
-                set.getString(5));
-    }
 }

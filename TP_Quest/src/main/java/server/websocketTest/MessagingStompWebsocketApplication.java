@@ -8,7 +8,7 @@ import server.FillData;
 public class MessagingStompWebsocketApplication {
 
 	public static void main(String[] args) {
-		FillData.fillDataBase();
+		FillData.main(null);
 		SpringApplication.run(MessagingStompWebsocketApplication.class, args);
 	}
 }

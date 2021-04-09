@@ -12,20 +12,12 @@ public class User {
 
     private long id;
     private String name;
-    private String password = null;
+    private char[] password;
     private int score = 0;
 
-    public User(String name, String password) {
+    public User(String name, char[] password) {
         this.name = name;
-        this.password = password;
+        this.password = new char[8];
     }
 
-    public User(ResultSet set) throws SQLException {
-        this(
-                set.getLong(1),
-                set.getString(2),
-                set.getString(3),
-                set.getInt(4));
-
-    }
 }

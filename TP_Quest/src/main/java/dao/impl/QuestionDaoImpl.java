@@ -1,10 +1,11 @@
 package dao.impl;
 
-import service.queryExecutor.SQLExecutor;
-import dao.domain.Question;
 import dao.QuestionDao;
+import dao.domain.Question;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,107 +13,163 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 public class QuestionDaoImpl implements QuestionDao {
-    private SQLExecutor executor = null;
+
+
+    private Connection connection = null;
 
     public QuestionDaoImpl(Connection connection) throws SQLException {
-        executor = new SQLExecutor(connection);
+        this.connection = connection;
         createTable();
     }
 
-    public long getTopicIndex(String topic){
-        try{
-            return executor.sqlQuery("select id from topic where name = '" + topic +
-                "'", resultSet -> {
-            ArrayList<Long> list = new ArrayList<>();
+    public long getTopicIndex(String topic) {
+        try {
+
+            PreparedStatement stm = connection.prepareStatement("select id from topic where name=?");
+            stm.setString(1, topic);
+            ResultSet resultSet = stm.executeQuery();
+
+            List<Long> resultDataList = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(resultSet.getLong(1));
+                resultDataList.add(resultSet.getLong(1));
             }
-            return list;
-        }).get(0);
+            stm.close();
+            resultSet.close();
+            return resultDataList.get(0);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return -1;
+        return 1;
 
     }
+
     public long getDifficultyIndex(String difficulty) {
         try {
-            return executor.sqlQuery("select id from difficulty where score = " + difficulty, resultSet -> {
-                ArrayList<Long> list = new ArrayList<>();
-                while (resultSet.next()) {
-                    list.add(resultSet.getLong(1));
-                }
-                return list;
-            }).get(0);
+
+            PreparedStatement stm = connection.prepareStatement("select id from difficulty where score=?");
+            stm.setLong(1, Integer.parseInt(difficulty));
+            ResultSet resultSet = stm.executeQuery();
+
+            List<Long> resultDataList = new ArrayList<>();
+            while (resultSet.next()) {
+                resultDataList.add(resultSet.getLong(1));
+            }
+            stm.close();
+            resultSet.close();
+            return resultDataList.get(0);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return -1;
     }
 
-    public List<Question> getQuestions(long id_topic, long id_difficulty){
+
+    public List<Question> getQuestions(long topicId, long difficultyId) {
         try {
-            return executor.sqlQuery("SELECT q.id,q.text,q.answer,t.name,d.score " +
-                            "FROM ((questions q " +
-                            "INNER JOIN topic t ON t.id = "+id_topic+" and q.id_topic = "+id_topic+") " +
-                            "INNER JOIN difficulty d ON d.id = "+id_difficulty+" and q.id_difficulty = "+id_difficulty+")", resultSet -> {
-                        ArrayList<Question> list = new ArrayList<>();
-                        while (resultSet.next()) {
-                            list.add(new Question(resultSet));
-                        }
-                        return list;
-                    }
-            );
+
+            PreparedStatement stm = connection.prepareStatement(
+                    "SELECT q.id,q.text,q.answer,t.name,d.score FROM ((questions q " +
+                            "INNER JOIN topic t ON t.id=? and q.id_topic=?) " +
+                            "INNER JOIN difficulty d ON d.id=? and q.id_difficulty=?)");
+
+            stm.setLong(1, topicId);
+            stm.setLong(2, topicId);
+            stm.setLong(3, difficultyId);
+            stm.setLong(4, difficultyId);
+            ResultSet resultSet = stm.executeQuery();
+
+            List<Question> resultDataList = new ArrayList<>();
+            while (resultSet.next()) {
+                resultDataList.add(new Question(
+                        resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)));
+            }
+            stm.close();
+            resultSet.close();
+            return resultDataList;
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return null;
     }
 
-    public List<Question> getQuestions(String topic, String difficulty){
+    public List<Question> getQuestions(String topic, String difficulty) {
 
-        long id_difficulty,id_topic;
+        long difficultyId, topicId;
 
-        id_topic = getTopicIndex(topic);
-        id_difficulty =  getDifficultyIndex(difficulty);
+        topicId = getTopicIndex(topic);
+        difficultyId = getDifficultyIndex(difficulty);
 
-        return getQuestions(id_topic,id_difficulty);
+        return getQuestions(topicId, difficultyId);
     }
 
-    public Question getRandomQuestion(String topic, String difficulty){
+    //SQL рандомный вопрос запрос -- ORDER BY RANDOM() limit 1
+    public Question getRandomQuestion(String topic, String difficulty) {
 
-        Random rnd = new Random(System.currentTimeMillis());
+        long difficultyId, topicId;
 
-        List<Question> questions= getQuestions(topic,difficulty);
-        return questions.get(Math.abs(rnd.nextInt()%questions.size()));
-    }
+        topicId = getTopicIndex(topic);
+        difficultyId = getDifficultyIndex(difficulty);
 
-    public String getCorrectAnswer(Question newQuestion){
         try {
-            return executor.sqlQuery("select answer from questions where id = " + newQuestion.getId(), resultSet -> {
-                        ArrayList<String> list = new ArrayList<>();
-                        while (resultSet.next()) {
-                            list.add(resultSet.getString(1));
-                        }
-                        return list;
-                    }
-            ).get(0);
+
+
+            PreparedStatement stm = connection.prepareStatement("SELECT q.id,q.text,q.answer,t.name,d.score " +
+                    "FROM ((questions q " +
+                    "INNER JOIN topic t ON t.id=?) " +
+                    "INNER JOIN difficulty d ON d.id=?) " +
+                    "ORDER BY RANDOM() " +
+                    "LIMIT 1");
+
+            stm.setLong(1, topicId);
+            stm.setLong(2, difficultyId);
+            ResultSet resultSet = stm.executeQuery();
+
+            List<Question> resultDataList = new ArrayList<>();
+            while (resultSet.next()) {
+                resultDataList.add(new Question(resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)));
+            }
+            stm.close();
+            resultSet.close();
+            return resultDataList.get(0);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return null;
     }
 
-    public String getCorrectAnswer(long id){
+    public String getCorrectAnswer(Question newQuestion) {
+
+        return getCorrectAnswer(newQuestion.getId());
+
+    }
+
+    public String getCorrectAnswer(long id) {
         try {
-            return executor.sqlQuery("select answer from questions where id = " + id, resultSet -> {
-                        ArrayList<String> list = new ArrayList<>();
-                        while (resultSet.next()) {
-                            list.add(resultSet.getString(1));
-                        }
-                        return list;
-                    }
-            ).get(0);
+
+            PreparedStatement stm = connection.prepareStatement("select answer from questions where id=?");
+            stm.setLong(1, id);
+            ResultSet resultSet = stm.executeQuery();
+
+            List<String> resultDataList = new ArrayList<>();
+            while (resultSet.next()) {
+                resultDataList.add(resultSet.getString(1));
+            }
+            stm.close();
+            resultSet.close();
+            return resultDataList.get(0);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -122,18 +179,27 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public Question get(long id) {
         try {
-            return executor.sqlQuery("SELECT q.id,q.text,q.answer,t.name,d.score " +
-                            "FROM ((questions q " +
-                            "INNER JOIN topic t ON t.id = q.id_topic) " +
-                            "INNER JOIN difficulty d ON d.id = and q.id_difficulty) " +
-                            "WHERE q.id =" +id, resultSet -> {
-                        ArrayList<Question> list = new ArrayList<>();
-                        while (resultSet.next()) {
-                            list.add(new Question(resultSet));
-                        }
-                        return list;
-                    }
-            ).get(0);
+
+            PreparedStatement stm = connection.prepareStatement("SELECT q.id,q.text,q.answer,t.name,d.score " +
+                    "FROM ((questions q " +
+                    "INNER JOIN topic t ON t.id = q.id_topic) " +
+                    "INNER JOIN difficulty d ON d.id = and q.id_difficulty) " +
+                    "WHERE q.id=?");
+            stm.setLong(1, id);
+            ResultSet resultSet = stm.executeQuery();
+
+            List<Question> resultDataList = new ArrayList<>();
+            while (resultSet.next()) {
+                resultDataList.add(new Question(resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)));
+            }
+            stm.close();
+            resultSet.close();
+            return resultDataList.get(0);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -143,77 +209,100 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public List<Question> get(Predicate<Question> predicate) throws SQLException {
 
-        return executor.sqlQuery("SELECT q.id,q.text,q.answer,t.name,d.score " +
+        PreparedStatement stm = connection.prepareStatement("SELECT q.id,q.text,q.answer,t.name,d.score " +
                 "FROM ((questions q " +
                 "INNER JOIN topic t ON t.id = q.id_topic) " +
-                "INNER JOIN difficulty d ON d.id = and q.id_difficulty) ", resultSet -> {
-                    ArrayList<Question> list = new ArrayList<>();
-                    while (resultSet.next()) {
-                        Question User = new Question(resultSet);
-                        if (predicate.test(User))
-                            list.add(User);
-                    }
-                    return list;
-                }
-        );
+                "INNER JOIN difficulty d ON d.id = and q.id_difficulty) ");
+        ResultSet resultSet = stm.executeQuery();
+
+        List<Question> resultDataList = new ArrayList<>();
+        while (resultSet.next()) {
+            resultDataList.add(new Question(resultSet.getLong(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5)));
+        }
+        stm.close();
+        resultSet.close();
+        return resultDataList;
 
     }
 
     @Override
     public void save(Question questionData) throws SQLException {
 
-        long id_difficulty,id_topic;
-        id_topic =  getTopicIndex(questionData.getTopic());
-        id_difficulty =  getDifficultyIndex(questionData.getDifficulty());
+        long difficultyId, topicId;
+        topicId = getTopicIndex(questionData.getTopic());
+        difficultyId = getDifficultyIndex(questionData.getDifficulty());
 
-        executor.sqlUpdate(
-                String.format("insert into questions (text,answer,id_topic,id_difficulty) values ('%s','%s',%d,%d)",
-                questionData.getText(),
-                questionData.getAnswer(),
-                id_topic,
-                id_difficulty));
+        PreparedStatement stm = connection.prepareStatement("insert into questions (text,answer,id_topic,id_difficulty) values (?,?,?,?)");
+        stm.setString(1, questionData.getText());
+        stm.setString(2, questionData.getAnswer());
+        stm.setLong(3, topicId);
+        stm.setLong(4, difficultyId);
+        stm.executeUpdate();
+
+        stm.close();
 
     }
 
     @Override
     public void update(Question questionData, String[] params) throws SQLException {
 
-        long id_difficulty,id_topic;
-        id_topic = getTopicIndex(questionData.getTopic());
-        id_difficulty =  getDifficultyIndex(questionData.getDifficulty());
+        long difficultyId, topicId;
+        topicId = getTopicIndex(questionData.getTopic());
+        difficultyId = getDifficultyIndex(questionData.getDifficulty());
 
-        executor.sqlUpdate(String.format( "update questions set id_topic=%d,id_difficulty=%d,text='%s',answer='%s' where id = %d",
-                id_topic,
-                id_difficulty,
-                questionData.getText(),
-                questionData.getAnswer(),
-                questionData.getId()));
+        PreparedStatement stm = connection.prepareStatement("update questions set id_topic=?,id_difficulty=?,text=?,answer=? where id = ?");
+        stm.setLong(1, topicId);
+        stm.setLong(2, difficultyId);
+        stm.setString(3, questionData.getText());
+        stm.setString(4, questionData.getAnswer());
+        stm.setLong(5, questionData.getId());
+        stm.executeUpdate();
+
+        stm.close();
+
     }
 
     @Override
     public void delete(Question questionData) throws SQLException {
-        executor.sqlUpdate(String.format( "delete from questions where id = %d", questionData.getId()));
 
+        PreparedStatement stm = connection.prepareStatement("delete from questions where id=?");
+        stm.setLong(1, questionData.getId());
+        stm.executeUpdate();
+
+        stm.close();
     }
 
     @Override
     public void createTable() throws SQLException {
-        executor.sqlUpdate("CREATE TABLE IF NOT EXISTS questions(" +
-                " id SERIAL PRIMARY KEY," +
-                " text VARCHAR(150) NOT NULL," +
-                " answer VARCHAR(50) NOT NULL," +
-                " id_topic INTEGER REFERENCES topic(id)," +
-                " id_difficulty INTEGER REFERENCES difficulty(id)," +
-                " UNIQUE(text))");
+
+        PreparedStatement stm = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS questions(" +
+                        " id SERIAL PRIMARY KEY," +
+                        " text VARCHAR(150) NOT NULL," +
+                        " answer VARCHAR(50) NOT NULL," +
+                        " id_topic INTEGER REFERENCES topic(id)," +
+                        " id_difficulty INTEGER REFERENCES difficulty(id)," +
+                        " UNIQUE(text))");
+        stm.executeUpdate();
+
+        stm.close();
     }
 
     @Override
     public void dropTable() throws SQLException {
-        executor.sqlUpdate("DROP TABLE questions ");
+
+        PreparedStatement stm = connection.prepareStatement("DROP TABLE questions ");
+        stm.executeUpdate();
     }
 
     @Override
     public void clearTable() throws SQLException {
-        executor.sqlUpdate("TRUNCATE TABLE questions ");
+
+        PreparedStatement stm = connection.prepareStatement("TRUNCATE TABLE questions ");
+        stm.executeUpdate();
     }
 }

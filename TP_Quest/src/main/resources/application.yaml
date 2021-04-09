@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quest_game_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  flyway:
+    baseline-on-migrate: true
+
+JDBC_DRIVER: org.postgresql.Driver
+DB_URL: jdbc:postgresql://localhost:5432/quest_game_db
+USER: postgres
+PASS: password

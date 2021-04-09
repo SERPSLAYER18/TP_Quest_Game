@@ -90,6 +90,7 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.15.jre7</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -22,11 +22,14 @@ public class UserDaoImpl implements UserDao {
         try {
             return executor.sqlQuery("select * from game_user where name = '" + name +
                             "' and password = '" + password + "'", resultSet -> {
-                        ArrayList<User> list = new ArrayList<>();
+                        List<User> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new User(resultSet));
+                            resultDataList.add(new User(resultSet.getLong(1),
+                                    resultSet.getString(2),
+                                    resultSet.getString(3).toCharArray(),
+                                    resultSet.getInt(4)));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -38,11 +41,11 @@ public class UserDaoImpl implements UserDao {
     public int getRecord(long id) {
         try {
             return executor.sqlQuery("select score from game_user where id = " + id, resultSet -> {
-                        ArrayList<Integer> list = new ArrayList<>();
+                        List<Integer> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(resultSet.getInt(1));
+                            resultDataList.add(resultSet.getInt(1));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -56,11 +59,14 @@ public class UserDaoImpl implements UserDao {
     public User get(long id) {
         try {
             return executor.sqlQuery("select * from game_user where id = " + id, resultSet -> {
-                        ArrayList<User> list = new ArrayList<>();
+                        List<User> resultDataList = new ArrayList<>();
                         while (resultSet.next()) {
-                            list.add(new User(resultSet));
+                            resultDataList.add(new User(resultSet.getLong(1),
+                                    resultSet.getString(2),
+                                    resultSet.getString(3).toCharArray(),
+                                    resultSet.getInt(4)));
                         }
-                        return list;
+                        return resultDataList;
                     }
             ).get(0);
         } catch (SQLException throwables) {
@@ -73,13 +79,16 @@ public class UserDaoImpl implements UserDao {
     public List<User> get(Predicate<User> predicate) throws SQLException {
 
         return executor.sqlQuery("select * from game_user", resultSet -> {
-                    ArrayList<User> list = new ArrayList<>();
+                    List<User> resultDataList = new ArrayList<>();
                     while (resultSet.next()) {
-                        User User = new User(resultSet);
+                        User User = new User(resultSet.getLong(1),
+                                resultSet.getString(2),
+                                resultSet.getString(3).toCharArray(),
+                                resultSet.getInt(4));
                         if (predicate.test(User))
-                            list.add(User);
+                            resultDataList.add(User);
                     }
-                    return list;
+                    return  resultDataList;
                 }
         );
 

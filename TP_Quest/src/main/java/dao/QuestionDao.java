@@ -10,7 +10,7 @@ public interface QuestionDao extends Dao<Question> {
 
     long getDifficultyIndex(String difficulty);
 
-    List<Question> getQuestions(long id_topic, long id_difficulty);
+    List<Question> getQuestions(long topicId, long difficultyId);
 
     List<Question> getQuestions(String topic, String difficulty);
 

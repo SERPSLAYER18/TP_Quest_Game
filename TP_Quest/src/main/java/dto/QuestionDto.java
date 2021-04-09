@@ -2,17 +2,15 @@ package dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class QuestionDto {
 
     private long id;
-    private final String text;
-    private final String answer;
-    private final String topic;
-    private final String difficulty;
+    private String text;
+    private String answer;
+    private String topic;
+    private String difficulty;
 
 }
