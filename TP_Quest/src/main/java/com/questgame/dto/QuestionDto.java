@@ -1,4 +1,4 @@
-package dto;
+package com.questgame.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,6 @@ public class QuestionDto {
 
     private long id;
     private String text;
-    private String answer;
     private String topic;
     private String difficulty;
 

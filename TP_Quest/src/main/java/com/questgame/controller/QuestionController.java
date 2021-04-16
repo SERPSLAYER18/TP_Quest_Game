@@ -1,12 +1,13 @@
-package controller;
+package com.questgame.controller;
 
+import com.questgame.dto.QuestionDto;
+import com.questgame.dto.QuestionQueryDto;
+import com.questgame.service.impl.QuestionServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import dto.*;
-import service.impl.QuestionServiceImpl;
 
 @Controller
 @RequiredArgsConstructor

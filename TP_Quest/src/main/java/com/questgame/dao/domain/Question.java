@@ -1,4 +1,4 @@
-package dao.domain;
+package com.questgame.dao.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
