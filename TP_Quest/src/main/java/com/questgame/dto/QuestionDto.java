@@ -10,6 +10,6 @@ public class QuestionDto {
     private long id;
     private String text;
     private String topic;
-    private String difficulty;
+    private int difficulty;
 
 }

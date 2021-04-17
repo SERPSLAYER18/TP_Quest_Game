@@ -4,10 +4,15 @@ import com.questgame.dto.QuestionDto;
 
 public interface QuestionService {
 
-    String getCorrectAnswer(String questionText);
+    long getTopicIndex(String topic);
+
+    long getDifficultyIndex(String difficulty);
+
+    String getCorrectAnswer(long id);
 
     QuestionDto getRandomQuestion(String topic, String difficulty);
 
-    boolean compareCorrectAnswer(String questionText, String userAnswer);
+    QuestionDto getRandomQuestion(long topicId, long difficultyId);
 
+    boolean compareCorrectAnswer(long questionId, String userAnswer);
 }

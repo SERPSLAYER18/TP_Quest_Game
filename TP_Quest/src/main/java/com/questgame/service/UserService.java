@@ -6,11 +6,15 @@ public interface UserService {
 
     UserDto get(String name, String password);
 
-    int getRecord(long id);
+    int getScore(long id);
 
     void save(String name, String password);
 
-    void update(long id, String[] params);
+    void updatePassword(long id, String password);
+
+    void updateUserName(long id, String username);
+
+    void updateScore(long id, int score);
 
     void delete(long id);
 

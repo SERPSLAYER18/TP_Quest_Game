@@ -13,9 +13,9 @@ public class Question {
     private String text;
     private String answer;
     private String topic;
-    private String difficulty;
+    private int difficulty;
 
-    public Question(String text, String answer, String topic, String difficulty) {
+    public Question(String text, String answer, String topic, int difficulty) {
 
         this.text = text;
         this.answer = answer;

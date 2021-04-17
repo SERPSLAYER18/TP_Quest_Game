@@ -6,13 +6,14 @@ public interface QuestionDao {
 
     long getTopicIndex(String topic);
 
-    long getDifficultyIndex(String difficulty);
+    long getDifficultyIndex(int difficulty);
 
-    Question getQuestion(String text);
+    Question getQuestion(long id);
 
-    Question getRandomQuestion(String topic, String difficulty);
+    Question getRandomQuestion(long topicId, long difficultyId);
 
     String getCorrectAnswer(long id);
 
-    boolean compareCorrectAnswer(String questionText, String userAnswer);
+    boolean compareCorrectAnswer(long questionId, String userAnswer);
+
 }

@@ -14,13 +14,12 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class QuestionController {
 
-    private final QuestionServiceImpl instance;
+    private final QuestionServiceImpl questionService;
 
     @MessageMapping("/question")
     @SendTo("/topic/questions")
-    public QuestionDto randomQuestionDto(QuestionQueryDto questionDtoQuery) {
-        System.out.println(instance.toString());
-        return instance.getRandomQuestion(
+    public QuestionDto randomQuestion(QuestionQueryDto questionDtoQuery) {
+        return questionService.getRandomQuestion(
                 questionDtoQuery.getTopic(),
                 questionDtoQuery.getDifficulty());
     }

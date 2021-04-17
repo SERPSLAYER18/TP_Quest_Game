@@ -8,11 +8,15 @@ public interface UserDao {
 
     User get(long id);
 
-    int getRecord(long id);
+    int getScore(long id);
 
-    void save(User User);
+    void save(String name, String password);
 
-    void update(long id, String[] params);
+    void updatePassword(long id, String password);
+
+    void updateUserName(long id, String username);
+
+    void updateScore(long id, int score);
 
     void delete(long id);
 }

@@ -22,11 +22,11 @@ public class UserDaoImpl implements UserDao {
         map.put("name", name);
         map.put("password", password);
 
-        return (jdbcTemplate.query("select * from game_user where name=:name and password=:password", map, (resultSet, rowNum) ->
-                new User(resultSet.getLong(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3).toCharArray(),
-                        resultSet.getInt(4)))).get(0);
+        return jdbcTemplate.queryForObject("select * from game_user where name=:name and password=:password", map, (resultSet, rowNum) ->
+                new User(resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("password").toCharArray(),
+                        resultSet.getInt("score")));
 
     }
 
@@ -36,48 +36,62 @@ public class UserDaoImpl implements UserDao {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
 
-        return (jdbcTemplate.query("select * from game_user where id=:id", map, (resultSet, rowNum) ->
-                new User(resultSet.getLong(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3).toCharArray(),
-                        resultSet.getInt(4)))).get(0);
+        return jdbcTemplate.queryForObject("select * from game_user where id=:id", map, (resultSet, rowNum) ->
+                new User(resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("password").toCharArray(),
+                        resultSet.getInt("score")));
 
     }
 
-
     @Override
-    public int getRecord(long id) {
+    public int getScore(long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
 
-        return (jdbcTemplate.query("select score from game_user where id=:id", map, (resultSet, rowNum) ->
-                new Integer(resultSet.getInt(4)))).get(0);
+        return jdbcTemplate.queryForObject("select score from game_user where id=:id", map, (resultSet, rowNum) ->
+                new Integer(resultSet.getInt("score")));
 
     }
 
     @Override
-    public void save(User user) {
+    public void save(String name, String password) {
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("name", user.getName());
-        map.put("password", user.getPassword());
-        map.put("id", user.getScore());
-        jdbcTemplate.update("insert into game_user (name,password,score) values (:name,:password,:score)", map);
+        map.put("name", name);
+        map.put("password", password);
+        jdbcTemplate.update("insert into game_user (name,password) values (:name,:password)", map);
 
     }
 
     @Override
-    public void update(long id, String[] params) {
-
-        User user = get(id);
+    public void updatePassword(long id, String password) {
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", params[0] == null ? user.getId() : Long.parseLong(params[0]));
-        map.put("name", params[1] == null ? user.getName() : params[1]);
-        map.put("password", params[2] == null ? user.getPassword() : params[2]);
-        map.put("score", params[3] == null ? user.getScore() : Integer.parseInt(params[3]));
-        jdbcTemplate.update("update game_user set name=:name, password=:password, score=:score where id=:id", map);
+        map.put("id", id);
+        map.put("password", password);
+        jdbcTemplate.update("update game_user set password=:password where id=:id", map);
+
+    }
+
+    @Override
+    public void updateUserName(long id, String username) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("name", username);
+        jdbcTemplate.update("update game_user set name=:name where id=:id", map);
+
+    }
+
+    @Override
+    public void updateScore(long id, int score) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("score", score);
+        jdbcTemplate.update("update game_user set score=:score where id=:id", map);
 
     }
 

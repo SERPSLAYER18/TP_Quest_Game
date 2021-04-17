@@ -1,7 +1,6 @@
 package com.questgame.service.impl;
 
 import com.questgame.dao.UserDao;
-import com.questgame.dao.domain.User;
 import com.questgame.dto.UserDto;
 import com.questgame.mapper.UserMapper;
 import com.questgame.service.UserService;
@@ -21,20 +20,29 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public int getRecord(long id) {
-        return userDAO.getRecord(id);
+    public int getScore(long id) {
+        return userDAO.getScore(id);
     }
 
 
     @Override
     public void save(String name, String password) {
-        userDAO.save(new User(-1, name, password.toCharArray(), 0));
+        userDAO.save(name, password);
     }
 
+    @Override
+    public void updatePassword(long id, String password) {
+        userDAO.updatePassword(id, password);
+    }
 
     @Override
-    public void update(long id, String[] params) {
-        userDAO.update(id, params);
+    public void updateUserName(long id, String username) {
+        userDAO.updateUserName(id, username);
+    }
+
+    @Override
+    public void updateScore(long id, int score) {
+        userDAO.updateScore(id, score);
     }
 
 
