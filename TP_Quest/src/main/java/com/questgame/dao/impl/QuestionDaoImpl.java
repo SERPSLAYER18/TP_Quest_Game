@@ -18,34 +18,34 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public long getTopicIndex(String topic) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("topic", topic);
+        Map<String, Object> sqlInsertParametersMap = new HashMap<String, Object>();
+        sqlInsertParametersMap.put("topic", topic);
 
-        return jdbcTemplate.queryForObject("select id from topic where name=:topic", map, (resultSet, rowNum) ->
+        return jdbcTemplate.queryForObject("select id from topic where name=:topic", sqlInsertParametersMap, (resultSet, rowNum) ->
                 new Long(resultSet.getLong("id")));
     }
 
     @Override
     public long getDifficultyIndex(int difficulty) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("score", difficulty);
+        Map<String, Object> sqlInsertParametersMap = new HashMap<String, Object>();
+        sqlInsertParametersMap.put("score", difficulty);
 
-        return jdbcTemplate.queryForObject("select id from difficulty where score=:score", map, (resultSet, rowNum) ->
+        return jdbcTemplate.queryForObject("select id from difficulty where score=:score", sqlInsertParametersMap, (resultSet, rowNum) ->
                 new Long(resultSet.getLong("id")));
     }
 
     @Override
     public Question getQuestion(long id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", id);
+        Map<String, Object> sqlInsertParametersMap = new HashMap<String, Object>();
+        sqlInsertParametersMap.put("id", id);
 
         return jdbcTemplate.queryForObject("SELECT q.id,q.text,q.answer,t.name,d.score " +
                 "FROM ((questions q " +
                 "INNER JOIN topic t ON t.id = q.id_topic) " +
                 "INNER JOIN difficulty d ON d.id = q.id_difficulty) " +
-                "WHERE q.id=:id", map, (resultSet, rowNum) ->
+                "WHERE q.id=:id", sqlInsertParametersMap, (resultSet, rowNum) ->
                 new Question(resultSet.getLong("id"),
                         resultSet.getString("text"),
                         resultSet.getString("answer"),
@@ -57,16 +57,16 @@ public class QuestionDaoImpl implements QuestionDao {
     public Question getRandomQuestion(long topicId, long difficultyId) {
 
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("topicId", topicId);
-        map.put("difficultyId", difficultyId);
+        Map<String, Object> sqlInsertParametersMap = new HashMap<String, Object>();
+        sqlInsertParametersMap.put("topicId", topicId);
+        sqlInsertParametersMap.put("difficultyId", difficultyId);
 
         return jdbcTemplate.queryForObject("SELECT q.id,q.text,q.answer,t.name,d.score " +
                 "FROM ((questions q " +
                 "INNER JOIN topic t ON t.id=:topicId AND q.id_topic=:topicId) " +
                 "INNER JOIN difficulty d ON d.id=:difficultyId AND q.id_difficulty=:difficultyId) " +
                 "ORDER BY RANDOM() " +
-                "LIMIT 1", map, (resultSet, rowNum) ->
+                "LIMIT 1", sqlInsertParametersMap, (resultSet, rowNum) ->
                 new Question(resultSet.getLong("id"),
                         resultSet.getString("text"),
                         resultSet.getString("answer"),
@@ -78,10 +78,10 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public String getCorrectAnswer(long id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", id);
+        Map<String, Object> sqlInsertParametersMap = new HashMap<String, Object>();
+        sqlInsertParametersMap.put("id", id);
 
-        return jdbcTemplate.queryForObject("select answer from questions where id=:id", map, (resultSet, rowNum) ->
+        return jdbcTemplate.queryForObject("select answer from questions where id=:id", sqlInsertParametersMap, (resultSet, rowNum) ->
                 new String(resultSet.getString("answer")));
     }
 
