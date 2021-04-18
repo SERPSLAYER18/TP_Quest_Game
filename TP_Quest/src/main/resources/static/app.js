@@ -53,7 +53,7 @@ function showQuestion(questionDTO) {
         ("<tr>"+
             "<td>" +  String(question.id) + "</td>"+
             "<td>" +  question.text + "</td>"+
-            "<td>" +  question.answer + "</td>"+
+            "<td>" +  "***" + "</td>"+
             "</tr>"));
 }
 
